@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html style="overflow-x:none ;overflow-y: auto;">
+	<head>
+		<title>Latin-Devanagari Transliteration</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		
+		
+		<script src="./jquery-1.11.1.min.js"></script>
+		<script src="./jquery-ui.min.js"></script>
+		
+		
+		<!--<script language="javascript" type="text/javascript" src="jquery-1.12.4.min.js"></script>
+		<script language="javascript" type="text/javascript" src="jquery-ui-1.11.1.min.js"></script>
+		-->
+		<link rel="stylesheet" type="text/css" href="./transliteration.css" />
+<!--		<link rel="stylesheet" href="./jquery-ui.min.css"> -->
+
+
+		<script language="javascript" type="text/javascript" src="./basic_functions.js"></script>
+		<script language="javascript" type="text/javascript" src="./character_match.js"></script>	
+		<script language="javascript" type="text/javascript" src="./transliteration.js"></script>
+
+		
+
+		<script>
+			document.onkeydown = function(event) {
+			//	alert(event.keyCode);
+				if(event.keyCode == 113) {
+					document.getElementById("devanagariText").innerHTML = document.getElementById("result").value;
+					setFlag();
+					//loadDoc(revTransliterate);
+				}
+
+				if(event.keyCode == 115) {
+					document.getElementById("latinText").innerHTML = document.getElementById("result").value;
+					setFlag();
+					//loadDoc(transliterate);
+				}
+			}
+		</script>
+		<style>
+			td{
+				text-align :center;
+			}
+			table{
+				border-collapse:collapse;
+			}
+			table, th, td {
+				font-size:12px;
+				border: 1px solid black;
+				padding : 3px;
+			}
+		</style>
+	</head>
+	
+	<body>
+
+		<div><center><table>
+		<tr>
+			<th>Key</th>
+			<td id=0 onclick="check(id)"></td>
+			<td id=1 onclick="check(id)"></td>
+			<td id=2 onclick="check(id)"></td>
+			<td id=3 onclick="check(id)"></td>
+			<td id=4 onclick="check(id)"></td>
+			<td id=5 onclick="check(id)"></td>
+			<td id=6 onclick="check(id)"></td>
+		</tr>
+		<tr>
+			<th>Function</th>
+			<td>Change Input</td>
+			<td>Copy Result</td>
+			<td>Find Selection</td>
+			<td>Help</td>
+			<td>Replace</td>
+			<td>Confirm Replace All</td>
+			<td>Focus on Input</td>
+		</tr>	
+		</table></center></div><br>
+		<center><div id="change_key" style="display:none;" ></div></center><br>
+		<input type="text" id="findTextbox" style="display:none; float:right;" oninput="findWord()"></input>
+		<div id="findAndReplaceDiv"style="display:none;float:right;">
+			<input type="text" size="5" id="findReplaceTextbox" name="Replace"></input>
+			<input type="text" id="findAndReplaceTextbox" name="Replace With"></input>
+			<button type="button" onclick="findAndReplace()">OK</button>
+		</div>
+		<div id="textArea" style="float:left;">
+			<button type="button" id="devanagariTextButton" style="display:none" onclick="setFlag()">Change To Latin</button>
+			<button type="button" id="latinTextButton" onclick="setFlag()">Change To Devanagari</button>
+		</div>
+		<br>
+		
+		<h3>Result</h3>
+		<textarea id="result" readonly></textarea><br>
+		<center><div id="not_found" style="display:none;" ></div></center><br>
+		<center><div id=buttonDiv">
+		
+			
+		
+			<button type="button" id="copyTextButton" onclick="copyText()">Copy Result</button>
+			<!--<button type="button" id="highlightResultButton" onclick="highlightSelectedText()">Highlight Result</button>-->
+		
+			<button type="button" id="help" onclick="setHelp()">Help</button>
+				
+			<button type="button" id="findButton" onclick="findWordFlag()">Find</button>
+		
+		
+		
+			<button type="button" id="findAndReplaceButton" onclick="setFindAndReplaceFlag()">Find & replace all</button>
+			
+		</div></center>
+		<div id="devanagariDiv" style="display:none">
+			<h3>Devanagari Text</h3>
+			<textarea class='highlightText' id="devanagariText" oninput="onChange()"  ></textarea> 
+		</div>
+		<div id="latinDiv">
+			<h3>Latin Text</h3>
+			<textarea class="highlightText" id="latinText" oninput="onChange()" ></textarea>
+		</div>
+		<div style="margin-top: 20px; display:none;" id="helpDiv">
+            <label>Consonants</label>
+            <table border="1">
+                <tr>
+                    <td>क</td><td>ख</td><td>ग</td><td>घ</td><td>ङ</td><td>च</td><td>छ</td><td>ज</td><td>झ</td><td>ञ</td><td>ट</td><td>ठ</td><td>ड</td><td>ढ</td><td>ण</td><td>त</td><td>थ</td><td>द</td><td>ध</td><td>न</td><td>प</td><td>फ</td><td>ब</td><td>भ</td><td>म</td><td>य</td><td>र</td><td>ऱ</td><td>ल</td><td>ळ</td><td>व</td><td>श</td><td>ष</td><td>स</td><td>ह</td>
+                </tr>
+                <tr>
+                    <td>k, K</td><td>kh, Kh</td><td>g, G</td><td>gh, Gh</td><td>~N</td><td>c, C</td><td>ch, Ch</td><td>j, J</td><td>z, Z, jh, Jh</td><td>~n</td><td>T</td><td>Th</td><td>D</td><td>Dh</td><td>N</td><td>t</td><td>th</td><td>d</td><td>dh</td><td>n</td><td>p, P</td><td>f, F, ph, Ph</td><td>b, B</td><td>bh, Bh</td><td>m, M</td><td>y, Y</td><td>r, R</td><td>~r, ~R</td><td>l</td><td>L</td><td>v, V, w, W</td><td>sh, S</td><td>Sh</td><td>s</td><td>h</td>
+                </tr>
+            </table>
+            <label style="margin-top:20px">Vowels</label>
+            <table border="1">
+                <tr>
+                    <td>अ</td><td>आ</td><td>इ</td><td>ई</td><td>उ</td><td>ऊ</td><td>ऋ</td><td>ऍ</td><td>ए</td><td>ऐ</td><td>ऑ</td><td>ओ</td><td>औ</td><td>ॲ</td>
+                </tr>
+                <tr>
+                    <td>a</td><td>A, aa</td><td>i</td><td>I, ee, ii</td><td>u</td><td>U, uu, oo</td><td>~ru, ~Ru</td><td>~e, ~E</td><td>e, E</td><td>ai</td><td>~o, ~O</td><td>o, O</td><td>au</td><td>~a, ~A</td>
+                </tr>
+            </table>
+	
+ </div>
+		<script language="javascript" type="text/javascript" src="modified_functionality.js"></script>
+	</body>
+</html>
